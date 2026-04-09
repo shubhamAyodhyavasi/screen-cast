@@ -1,6 +1,6 @@
 # iOS App – Screen Cast Sender
 
-SwiftUI app that captures the iOS screen and streams it to a paired Android TV via WebRTC.
+SwiftUI app that discovers Android TV devices via the signaling server and initiates a WebRTC session to stream the iOS screen.
 
 ## Requirements
 
@@ -13,10 +13,18 @@ SwiftUI app that captures the iOS screen and streams it to a paired Android TV v
 
 ```
 ScreenCast/
-├── ScreenCastApp.swift          – App entry point
-├── ContentView.swift            – Root SwiftUI view + device list
-├── SignalingClient.swift        – WebSocket ↔ signaling server
-└── ScreenCaptureManager.swift   – RPScreenRecorder integration
+├── ScreenCastApp.swift              – App entry point
+├── ContentView.swift                – Root view (hosts DeviceListView)
+├── SignalingClient.swift            – Migration note (replaced by Services/)
+├── ScreenCaptureManager.swift       – RPScreenRecorder integration
+├── Models/
+│   └── Device.swift                 – Android TV device model
+├── Services/
+│   └── WebSocketService.swift       – WebSocket transport + message dispatch
+├── ViewModels/
+│   └── DeviceListViewModel.swift    – MVVM ViewModel for device discovery
+└── Views/
+    └── DeviceListView.swift         – Device list + connection status UI
 ```
 
 ## Setup
@@ -25,7 +33,7 @@ ScreenCast/
 2. Add the WebRTC SDK via Swift Package Manager or CocoaPods.
 3. In **Signing & Capabilities**, add the **Broadcast Upload Extension** capability.
 4. Set `NSCameraUsageDescription` and `NSMicrophoneUsageDescription` in `Info.plist` if you need audio.
-5. Update `SignalingClient.swift` to point to your signaling server:
+5. Update the server URL in `Services/WebSocketService.swift`:
    ```swift
    init(serverURL: URL = URL(string: "ws://<your-server-ip>:8080")!)
    ```
@@ -34,8 +42,20 @@ ScreenCast/
 ## Architecture
 
 ```
-iOS App
-  └─ ScreenCaptureManager  (RPScreenRecorder → raw video frames)
-       └─ WebRTCManager     (encode → RTP → ICE/DTLS)
-  └─ SignalingClient        (WebSocket → signaling server)
+ContentView
+  └─ DeviceListViewModel   (ObservableObject)
+       └─ WebSocketService  (WebSocket transport, UPPERCASE message protocol)
+            • role: "ios"
+            • Sends:  REGISTER, CONNECT_REQUEST, OFFER, ANSWER, ICE_CANDIDATE, DISCONNECT
+            • Handles: CONNECTED, DEVICE_LIST, CONNECT_ACCEPT, OFFER, ANSWER, ICE_CANDIDATE,
+                       DISCONNECT, PEER_DISCONNECTED
+  └─ ScreenCaptureManager  (RPScreenRecorder → raw video frames → WebRTC)
 ```
+
+## Protocol roles
+
+| Role         | This app  | Android TV app |
+|-------------|-----------|----------------|
+| `ios`        | ✓ sender  |                |
+| `android_tv` |           | ✓ receiver     |
+

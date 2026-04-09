@@ -4,64 +4,75 @@ import android.util.Log
 import org.json.JSONObject
 
 /**
- * Stub WebRTC manager for the Android TV receiver.
+ * WebRTCManager (stub)
  *
- * In a production implementation this class would:
- * 1. Initialise a `PeerConnection` using the Google WebRTC library.
- * 2. Set the remote description from the incoming offer.
- * 3. Create an answer and send it via [SignalingClient].
- * 4. Apply received ICE candidates to the peer connection.
- * 5. Render the incoming video track onto a [android.view.SurfaceView].
+ * Placeholder for the Android TV WebRTC receiver pipeline.
  *
- * Integrating the full WebRTC SDK is beyond the scope of this skeleton
- * but the interface is fully defined here so the rest of the app can
- * compile and run without it.
+ * In a full implementation this class would:
+ *   1. Initialise a `PeerConnection` using the Google WebRTC library.
+ *   2. Set the remote description from the incoming SDP offer.
+ *   3. Create an SDP answer and send it via [SignalingRepository.sendAnswer].
+ *   4. Apply received ICE candidates to the peer connection.
+ *   5. Render the decoded video track onto a [android.view.SurfaceView].
+ *
+ * The interface matches what [MainViewModel] wires up via
+ * [SignalingRepository] callbacks, so swapping in a real implementation
+ * requires no changes outside this file.
+ *
+ * @param repository Used to send the SDP answer and ICE candidates back
+ *                   to the iOS peer.
  */
 class WebRTCManager(
-    private val signalingClient: SignalingClient,
+    private val repository: SignalingRepository,
 ) {
-
     private var remotePeerId: String? = null
 
     // -------------------------------------------------------------------------
-    // Called by SignalingClient
+    // Called by the ViewModel (via SignalingRepository callbacks)
     // -------------------------------------------------------------------------
 
     /**
-     * Processes an incoming SDP offer from the iOS sender.
-     * @param sdp    Raw SDP JSON object from the signaling message.
+     * Handle an incoming SDP offer from the iOS sender.
+     *
+     * @param sdp    Raw SDP JSON object from the OFFER signaling message.
      * @param fromId ClientId of the iOS sender.
      */
     fun handleOffer(sdp: JSONObject, fromId: String) {
         remotePeerId = fromId
-        Log.d(TAG, "Received offer from $fromId: $sdp")
+        Log.d(TAG, "Received OFFER from $fromId")
 
         // TODO:
         //   peerConnection.setRemoteDescription(SessionDescription(OFFER, sdp.getString("sdp")))
         //   peerConnection.createAnswer { answer ->
         //       peerConnection.setLocalDescription(answer)
-        //       signalingClient.sendAnswer(answer.toJSON(), fromId)
+        //       repository.sendAnswer(answer.toJSON(), fromId)
         //   }
 
-        // Stub: acknowledge with a placeholder answer so the flow is logged.
+        // Stub: send a placeholder answer so the signaling flow can be
+        // exercised end-to-end before WebRTC is fully integrated.
         val stubAnswer = JSONObject().apply {
             put("type", "answer")
-            put("sdp", "stub-sdp")
+            put("sdp",  "stub-sdp")
         }
-        signalingClient.sendAnswer(stubAnswer, fromId)
-        Log.d(TAG, "Sent stub answer to $fromId")
+        repository.sendAnswer(stubAnswer, fromId)
+        Log.d(TAG, "Sent stub ANSWER to $fromId")
     }
 
     /**
-     * Applies a received ICE candidate to the active peer connection.
+     * Apply an incoming ICE candidate from the iOS peer to the active
+     * peer connection.
+     *
+     * @param candidate JSON object containing the ICE candidate fields.
+     * @param fromId    ClientId of the iOS peer.
      */
     fun handleRemoteIceCandidate(candidate: JSONObject, fromId: String) {
-        Log.d(TAG, "ICE candidate from $fromId: $candidate")
+        Log.d(TAG, "ICE_CANDIDATE from $fromId: $candidate")
         // TODO: peerConnection.addIceCandidate(IceCandidate(...))
     }
 
     /**
-     * Tear down the current WebRTC session.
+     * Tear down the current WebRTC session (peer disconnected or DISCONNECT
+     * message received).
      */
     fun hangup() {
         Log.d(TAG, "Hangup – closing peer connection")

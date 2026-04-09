@@ -45,4 +45,6 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.coroutines.android)
     implementation(libs.okhttp)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
 }
