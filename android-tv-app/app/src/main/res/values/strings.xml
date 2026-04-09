@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Screen Cast</string>
+    <string name="status_waiting">Waiting for connection…</string>
+    <string name="status_connecting">Connecting to signaling server…</string>
+    <string name="status_registered">Registered – waiting for iOS sender…</string>
+    <string name="status_streaming">Receiving stream</string>
+    <string name="status_error">Error</string>
+</resources>

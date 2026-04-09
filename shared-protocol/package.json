@@ -1,0 +1,21 @@
+{
+  "name": "@screen-cast/shared-protocol",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for the screen-cast signaling protocol",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "keywords": [
+    "webrtc",
+    "signaling",
+    "screen-cast"
+  ],
+  "license": "MIT"
+}
