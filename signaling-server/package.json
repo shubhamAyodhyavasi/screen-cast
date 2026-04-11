@@ -2,10 +2,10 @@
   "name": "@screen-cast/signaling-server",
   "version": "1.0.0",
   "description": "WebSocket signaling server for iOS ↔ Android TV screen casting",
-  "main": "src/index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "ws": "^8.17.0",
