@@ -1,3 +1,10 @@
+//
+//  ScreenCaptureManager.swift
+//  screen-cast
+//
+//  Created by shubham ayodhyavasi on 11/04/26.
+//
+
 import Foundation
 import ReplayKit
 import Combine

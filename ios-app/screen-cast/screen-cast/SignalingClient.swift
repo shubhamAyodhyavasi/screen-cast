@@ -1,3 +1,10 @@
+//
+//  SignalingClient.swift
+//  screen-cast
+//
+//  Created by shubham ayodhyavasi on 11/04/26.
+//
+
 // SignalingClient.swift
 //
 // This file is retained for reference only.

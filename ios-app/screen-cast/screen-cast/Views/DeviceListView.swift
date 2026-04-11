@@ -1,3 +1,10 @@
+//
+//  DeviceListView.swift
+//  screen-cast
+//
+//  Created by shubham ayodhyavasi on 11/04/26.
+//
+
 import SwiftUI
 
 // MARK: - DeviceListView
@@ -100,19 +107,20 @@ struct DeviceListView: View {
     }
 
     // MARK: – Toolbar
-
     private var serverStatusBadge: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
+        ToolbarItem(placement: .automatic) {
             HStack(spacing: 4) {
                 Circle()
                     .frame(width: 8, height: 8)
-                    .foregroundStyle(viewModel.isServerConnected ? Color.green : Color.red)
+                    .foregroundStyle(viewModel.isServerConnected ? .green : .red)
+
                 Text(viewModel.isServerConnected ? "Server connected" : "Disconnected")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
     }
+
 }
 
 // MARK: - DeviceRow
@@ -125,7 +133,7 @@ private struct DeviceRow: View {
     var body: some View {
         HStack {
             Image(systemName: "appletv.fill")
-                .foregroundStyle(.accent)
+                .foregroundStyle(Color.accentColor)
             VStack(alignment: .leading) {
                 Text(device.name)
                     .font(.headline)
@@ -139,7 +147,7 @@ private struct DeviceRow: View {
                     .controlSize(.small)
             } else {
                 Image(systemName: "dot.radiowaves.right")
-                    .foregroundStyle(.accent)
+                    .foregroundStyle(Color.accentColor)
             }
         }
         .contentShape(Rectangle())

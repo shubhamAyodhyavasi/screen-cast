@@ -1,3 +1,10 @@
+//
+//  DeviceListViewModel.swift
+//  screen-cast
+//
+//  Created by shubham ayodhyavasi on 11/04/26.
+//
+
 import Foundation
 import Combine
 
@@ -38,7 +45,7 @@ final class DeviceListViewModel: ObservableObject {
     private let service = WebSocketService()
     private var cancellables = Set<AnyCancellable>()
 
-    // MARK: - Initialisation
+    // MARK: - Initialization
 
     init() {
         bindService()
