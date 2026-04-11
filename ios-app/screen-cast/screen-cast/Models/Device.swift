@@ -1,3 +1,10 @@
+//
+//  Device.swift
+//  screen-cast
+//
+//  Created by shubham ayodhyavasi on 11/04/26.
+//
+
 import Foundation
 
 /// Represents an Android TV device discovered via the signaling server.

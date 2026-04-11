@@ -1,3 +1,9 @@
+//
+//  ContentView.swift
+//  screen-cast
+//
+//  Created by shubham ayodhyavasi on 11/04/26.
+//
 import SwiftUI
 
 /// Root view – creates the shared ViewModel and hosts `DeviceListView`.
